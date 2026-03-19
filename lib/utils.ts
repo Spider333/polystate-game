@@ -1,4 +1,4 @@
-import type { Medal, Tier, CostLevel } from "@/engine/types"
+import type { Medal, Tier } from "@/engine/types"
 
 export function formatCash(amount: number): string {
   if (amount >= 1000) {
@@ -41,20 +41,10 @@ export function getTierColor(tier: Tier): string {
   }
 }
 
-export function getTierBg(tier: Tier): string {
-  switch (tier) {
-    case "HEAVEN": return "bg-tier-heaven"
-    case "PARADISE": return "bg-tier-paradise"
-    case "PURGATORY": return "bg-tier-purgatory"
-    case "LIMBO": return "bg-tier-limbo"
-    case "HELL": return "bg-tier-hell"
-  }
-}
-
 export function getCategoryLabel(category: string): string {
   switch (category) {
     case "residency": return "Residency"
-    case "tax": return "Tax Residency"
+    case "tax": return "Tax"
     case "business": return "Business"
     default: return category
   }
@@ -70,7 +60,6 @@ export function getCategoryIcon(category: string): string {
 }
 
 export function getFlagEmoji(countryId: string): string {
-  // Map country IDs to flag emojis
   const flags: Record<string, string> = {
     PY: "\u{1F1F5}\u{1F1FE}",
     AE: "\u{1F1E6}\u{1F1EA}",

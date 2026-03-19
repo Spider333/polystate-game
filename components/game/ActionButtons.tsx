@@ -11,8 +11,8 @@ interface ActionButtonsProps {
 export default function ActionButtons({ onSkip, phase, onEndTurn }: ActionButtonsProps) {
   if (phase === "ACTION") {
     return (
-      <div className="flex justify-center gap-3">
-        <PixelButton onClick={onSkip} variant="secondary">
+      <div className="flex justify-center gap-4 py-2">
+        <PixelButton onClick={onSkip} variant="secondary" size="md">
           Skip Turn
         </PixelButton>
       </div>
@@ -21,9 +21,9 @@ export default function ActionButtons({ onSkip, phase, onEndTurn }: ActionButton
 
   if (phase === "TURN_END") {
     return (
-      <div className="flex justify-center">
-        <PixelButton onClick={onEndTurn} size="lg">
-          Next Turn
+      <div className="flex justify-center py-2">
+        <PixelButton onClick={onEndTurn} size="lg" variant="primary">
+          Next Turn &rarr;
         </PixelButton>
       </div>
     )

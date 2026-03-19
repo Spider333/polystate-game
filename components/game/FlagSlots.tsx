@@ -2,50 +2,55 @@
 
 import type { PlantedFlag, Country } from "@/engine/types"
 import { getFlagEmoji, getCategoryLabel, formatCash } from "@/lib/utils"
-import PixelPanel from "@/components/ui/PixelPanel"
 
 interface FlagSlotsProps {
   flags: PlantedFlag[]
   countries: Country[]
 }
 
-const CATEGORIES = ["residency", "tax", "business"] as const
+const CATEGORIES = [
+  { key: "residency" as const, icon: "\u{1F3E0}", color: "accent-green" },
+  { key: "tax" as const, icon: "\u{1F4B0}", color: "accent-gold" },
+  { key: "business" as const, icon: "\u{1F3E2}", color: "accent-blue" },
+]
 
 export default function FlagSlots({ flags, countries }: FlagSlotsProps) {
   return (
     <div className="grid grid-cols-3 gap-2">
-      {CATEGORIES.map((category) => {
-        const flag = flags.find((f) => f.category === category)
-        const country = flag
-          ? countries.find((c) => c.id === flag.countryId)
-          : null
+      {CATEGORIES.map(({ key, icon, color }) => {
+        const flag = flags.find((f) => f.category === key)
+        const country = flag ? countries.find((c) => c.id === flag.countryId) : null
+        const isActive = !!flag
 
         return (
-          <PixelPanel
-            key={category}
-            variant={flag ? "accent" : "default"}
-            className="text-center space-y-1"
+          <div
+            key={key}
+            className={`p-3 text-center space-y-1 rounded-lg transition-all duration-300 ${
+              isActive ? "flag-slot-active" : "flag-slot"
+            }`}
           >
-            <div className="text-[8px] text-text-muted uppercase">
-              {getCategoryLabel(category)}
+            <div className={`text-[7px] text-${color} uppercase tracking-widest`}>
+              {icon} {getCategoryLabel(key)}
             </div>
+
             {flag && country ? (
-              <>
-                <div className="text-2xl">{getFlagEmoji(flag.countryId)}</div>
+              <div className="animate-bounce-in">
+                <div className="text-2xl my-1">{getFlagEmoji(flag.countryId)}</div>
                 <div className="text-[8px] text-text-primary">{country.name}</div>
-                <div className="text-[8px] text-text-muted">
-                  {formatCash(flag.annualCost)}/yr
-                </div>
-                {category === "tax" && (
-                  <div className="text-[8px] text-accent-green">
-                    {flag.taxRate}% tax
+                <div className="text-[7px] text-text-muted">{formatCash(flag.annualCost)}/yr</div>
+                {key === "tax" && (
+                  <div className={`text-[8px] font-pixel ${flag.taxRate === 0 ? "text-accent-green glow-green" : "text-accent-gold"}`}>
+                    {flag.taxRate}%
                   </div>
                 )}
-              </>
+              </div>
             ) : (
-              <div className="text-2xl opacity-20">---</div>
+              <div className="py-2">
+                <div className="text-xl opacity-10">?</div>
+                <div className="text-[7px] text-text-muted mt-1">Empty</div>
+              </div>
             )}
-          </PixelPanel>
+          </div>
         )
       })}
     </div>

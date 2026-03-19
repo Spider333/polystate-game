@@ -10,16 +10,16 @@ interface PixelButtonProps {
 }
 
 const variantStyles = {
-  primary: "bg-accent-green text-bg-dark hover:brightness-110 pixel-border-accent",
-  secondary: "bg-bg-panel text-text-primary hover:bg-opacity-80 pixel-border",
-  danger: "bg-danger-red text-white hover:brightness-110 pixel-border-red",
-  gold: "bg-accent-gold text-bg-dark hover:brightness-110 pixel-border-gold",
+  primary: "bg-accent-green text-bg-dark hover:bg-accent-teal",
+  secondary: "bg-bg-highlight text-text-primary hover:bg-bg-card border border-white/10",
+  danger: "bg-danger-red text-white hover:brightness-110",
+  gold: "bg-accent-gold text-bg-dark hover:brightness-110",
 }
 
 const sizeStyles = {
   sm: "px-3 py-1.5 text-[8px]",
-  md: "px-4 py-2 text-[10px]",
-  lg: "px-6 py-3 text-xs",
+  md: "px-5 py-2.5 text-[10px]",
+  lg: "px-7 py-3.5 text-xs",
 }
 
 export default function PixelButton({
@@ -35,8 +35,7 @@ export default function PixelButton({
       onClick={onClick}
       disabled={disabled}
       className={`
-        font-pixel transition-all duration-100 uppercase tracking-wider
-        active:translate-y-[2px] active:shadow-none
+        font-pixel uppercase tracking-wider rounded-lg btn-pixel transition-all duration-100
         disabled:opacity-40 disabled:cursor-not-allowed disabled:active:translate-y-0
         ${variantStyles[variant]}
         ${sizeStyles[size]}

@@ -8,64 +8,153 @@
   body {
     @apply bg-bg-dark text-text-primary font-pixel;
   }
+
+  ::selection {
+    background: #5ee6a066;
+    color: #f0f0f0;
+  }
+}
+
+@layer components {
+  /* Polytopia-style raised panels */
+  .panel {
+    @apply bg-bg-card rounded-lg;
+    border: 2px solid rgba(255, 255, 255, 0.08);
+    box-shadow:
+      0 4px 0 0 rgba(0, 0, 0, 0.3),
+      0 8px 24px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .panel-accent {
+    @apply bg-bg-card rounded-lg;
+    border: 2px solid #5ee6a044;
+    box-shadow:
+      0 4px 0 0 rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(94, 230, 160, 0.08),
+      inset 0 1px 0 rgba(94, 230, 160, 0.1);
+  }
+
+  .panel-gold {
+    @apply bg-bg-card rounded-lg;
+    border: 2px solid #ffd16644;
+    box-shadow:
+      0 4px 0 0 rgba(0, 0, 0, 0.3),
+      0 0 20px rgba(255, 209, 102, 0.08),
+      inset 0 1px 0 rgba(255, 209, 102, 0.1);
+  }
+
+  /* Pixel-style buttons with depth */
+  .btn-pixel {
+    @apply font-pixel uppercase tracking-wider transition-all duration-100;
+    box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.4);
+    border-radius: 6px;
+  }
+
+  .btn-pixel:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.4);
+  }
+
+  /* Country tile with isometric-inspired bevel */
+  .country-tile {
+    @apply bg-gradient-to-b from-bg-highlight to-bg-card rounded-lg transition-all duration-200;
+    border: 2px solid rgba(255, 255, 255, 0.06);
+    box-shadow: 0 3px 0 0 rgba(0, 0, 0, 0.25);
+  }
+
+  .country-tile:hover {
+    border-color: rgba(94, 230, 160, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 0 20px rgba(94, 230, 160, 0.05);
+  }
+
+  /* Flag slot with glow */
+  .flag-slot {
+    @apply rounded-lg text-center;
+    background: linear-gradient(180deg, #263354 0%, #1f2a48 100%);
+    border: 2px dashed rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .flag-slot-active {
+    border: 2px solid #5ee6a044;
+    box-shadow:
+      inset 0 2px 8px rgba(0, 0, 0, 0.2),
+      0 0 16px rgba(94, 230, 160, 0.1);
+  }
+
+  /* Score bar segments */
+  .score-bar {
+    @apply h-2.5 rounded-full overflow-hidden;
+    background: rgba(0, 0, 0, 0.3);
+  }
+
+  .score-bar-fill {
+    @apply h-full rounded-full transition-all duration-500;
+    background: linear-gradient(90deg, #5ee6a0, #4ecdc4);
+  }
+
+  /* Turn progress */
+  .turn-track {
+    @apply h-3 rounded-full overflow-hidden;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .turn-fill {
+    @apply h-full rounded-full transition-all duration-500;
+    background: linear-gradient(90deg, #5ee6a0, #ffd166);
+  }
 }
 
 @layer utilities {
-  .pixel-border {
-    box-shadow:
-      inset -4px -4px 0px 0px rgba(0, 0, 0, 0.3),
-      inset 4px 4px 0px 0px rgba(255, 255, 255, 0.1),
-      0 0 0 2px rgba(255, 255, 255, 0.1);
-  }
-
-  .pixel-border-accent {
-    box-shadow:
-      inset -4px -4px 0px 0px rgba(0, 0, 0, 0.3),
-      inset 4px 4px 0px 0px rgba(78, 204, 163, 0.3),
-      0 0 0 2px #4ecca3;
-  }
-
-  .pixel-border-gold {
-    box-shadow:
-      inset -4px -4px 0px 0px rgba(0, 0, 0, 0.3),
-      inset 4px 4px 0px 0px rgba(255, 211, 105, 0.3),
-      0 0 0 2px #ffd369;
-  }
-
-  .pixel-border-red {
-    box-shadow:
-      inset -4px -4px 0px 0px rgba(0, 0, 0, 0.3),
-      inset 4px 4px 0px 0px rgba(226, 62, 87, 0.3),
-      0 0 0 2px #e23e57;
-  }
-
   .pixel-text-shadow {
     text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+  }
+
+  .glow-green {
+    text-shadow: 0 0 10px rgba(94, 230, 160, 0.5), 0 0 30px rgba(94, 230, 160, 0.2);
+  }
+
+  .glow-gold {
+    text-shadow: 0 0 10px rgba(255, 209, 102, 0.5), 0 0 30px rgba(255, 209, 102, 0.2);
   }
 
   .image-pixelated {
     image-rendering: pixelated;
   }
 
-  .animate-pixel-pulse {
-    animation: pixelPulse 1s ease-in-out infinite;
+  .scrollbar-game::-webkit-scrollbar {
+    width: 6px;
   }
 
-  @keyframes pixelPulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.6; }
+  .scrollbar-game::-webkit-scrollbar-track {
+    background: transparent;
   }
 
-  .scrollbar-pixel::-webkit-scrollbar {
-    width: 8px;
+  .scrollbar-game::-webkit-scrollbar-thumb {
+    background: #5ee6a044;
+    border-radius: 3px;
   }
 
-  .scrollbar-pixel::-webkit-scrollbar-track {
-    background: #16213e;
+  .scrollbar-game::-webkit-scrollbar-thumb:hover {
+    background: #5ee6a088;
   }
 
-  .scrollbar-pixel::-webkit-scrollbar-thumb {
-    background: #4ecca3;
-    border: 2px solid #16213e;
+  /* Decorative grid pattern */
+  .grid-pattern {
+    background-image:
+      linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  /* Isometric diamond decoration */
+  .iso-diamond {
+    width: 20px;
+    height: 20px;
+    transform: rotate(45deg);
+    border-radius: 2px;
   }
 }

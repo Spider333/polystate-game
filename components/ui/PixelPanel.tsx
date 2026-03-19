@@ -9,14 +9,14 @@ export default function PixelPanel({
   className = "",
   variant = "default",
 }: PixelPanelProps) {
-  const borderClass = {
-    default: "pixel-border",
-    accent: "pixel-border-accent",
-    gold: "pixel-border-gold",
+  const panelClass = {
+    default: "panel",
+    accent: "panel-accent",
+    gold: "panel-gold",
   }[variant]
 
   return (
-    <div className={`bg-bg-panel p-4 ${borderClass} ${className}`}>
+    <div className={`${panelClass} p-4 ${className}`}>
       {children}
     </div>
   )
