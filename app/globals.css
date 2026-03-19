@@ -158,30 +158,4 @@
     border-radius: 2px;
   }
 
-  /* World map character idle float */
-  .world-map-character {
-    animation: characterFloat 2s ease-in-out infinite;
-  }
-
-  /* World map planted flag pulse */
-  .world-map-planted-pulse {
-    animation: plantedPulse 2.5s ease-in-out infinite;
-  }
-
-  /* Hide map labels on small screens */
-  @media (max-width: 480px) {
-    .sm-map-label {
-      display: none;
-    }
-  }
-}
-
-@keyframes characterFloat {
-  0%, 100% { translate: 0 0; }
-  50% { translate: 0 -3px; }
-}
-
-@keyframes plantedPulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.7; }
 }

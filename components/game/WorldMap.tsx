@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useRef, useCallback } from "react"
 import type { PlantedFlag, Country } from "@/engine/types"
+import { COUNTRY_COORDS } from "@/data/country-coordinates"
 
 interface WorldMapProps {
   countries: Country[]
@@ -10,83 +11,142 @@ interface WorldMapProps {
   onCountryClick?: (countryId: string) => void
 }
 
-// Region-based grid positions mapped to SVG coordinates (640x320 viewport)
-const COUNTRY_POSITIONS: Record<string, { x: number; y: number; label: string }> = {
-  // Americas
-  "US-DE": { x: 80, y: 80, label: "DE" },
-  "US-WY": { x: 140, y: 80, label: "WY" },
-  "SV":    { x: 60, y: 140, label: "SV" },
-  "CR":    { x: 120, y: 140, label: "CR" },
-  "CO":    { x: 180, y: 140, label: "CO" },
-  "PA":    { x: 240, y: 160, label: "PA" },
-  "PY":    { x: 100, y: 220, label: "PY" },
-  // Europe
-  "PT":    { x: 270, y: 50, label: "PT" },
-  "CZ":    { x: 340, y: 50, label: "CZ" },
-  "EE":    { x: 380, y: 30, label: "EE" },
-  "MT":    { x: 320, y: 100, label: "MT" },
-  "CH":    { x: 360, y: 90, label: "CH" },
-  // Middle East / Caucasus
-  "GE":    { x: 440, y: 50, label: "GE" },
-  "AE":    { x: 460, y: 110, label: "AE" },
-  // Asia
-  "TH":    { x: 510, y: 100, label: "TH" },
-  "MY":    { x: 520, y: 160, label: "MY" },
-  "SG":    { x: 560, y: 120, label: "SG" },
-  "HK":    { x: 560, y: 70, label: "HK" },
-  // Caribbean
-  "KY":    { x: 170, y: 110, label: "KY" },
-  "VG":    { x: 210, y: 110, label: "VG" },
-}
-
-// Pixel character as inline SVG group
-function PixelCharacter({ x, y }: { x: number; y: number }) {
-  return (
-    <g
-      className="world-map-character"
-      style={{
-        transform: `translate(${x - 8}px, ${y - 22}px)`,
-        transition: "transform 700ms ease-in-out",
-      }}
-    >
-      {/* Head */}
-      <rect x={4} y={0} width={8} height={7} rx={1} fill="#5ee6a0" />
-      {/* Eyes */}
-      <rect x={5} y={2} width={2} height={2} fill="#0f172a" />
-      <rect x={9} y={2} width={2} height={2} fill="#0f172a" />
-      {/* Body */}
-      <rect x={3} y={8} width={10} height={8} rx={1} fill="#4ecdc4" />
-      {/* Arms */}
-      <rect x={0} y={9} width={3} height={6} rx={1} fill="#5ee6a0" />
-      <rect x={13} y={9} width={3} height={6} rx={1} fill="#5ee6a0" />
-      {/* Legs */}
-      <rect x={4} y={17} width={3} height={5} rx={1} fill="#5ee6a0" />
-      <rect x={9} y={17} width={3} height={5} rx={1} fill="#5ee6a0" />
-      {/* Flag in hand */}
-      <rect x={14} y={5} width={1} height={8} fill="#ffd166" />
-      <rect x={15} y={5} width={5} height={4} fill="#ffd166" />
-    </g>
-  )
-}
-
 export default function WorldMap({
-  countries,
   flags,
   lastPlantedCountry,
-  onCountryClick,
 }: WorldMapProps) {
-  const [characterPos, setCharacterPos] = useState({ x: 320, y: 160 })
-  const [hoveredCountry, setHoveredCountry] = useState<string | null>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const globeRef = useRef<import("cobe").Globe | null>(null)
+  const phiRef = useRef(0)
+  const thetaRef = useRef(0.2)
+  const isHoveredRef = useRef(false)
+  const targetCoordsRef = useRef<{ phi: number; theta: number } | null>(null)
+  const rafRef = useRef<number>(0)
 
-  const plantedCountryIds = new Set(flags.map((f) => f.countryId))
-
-  // Move character to last planted country
-  useEffect(() => {
-    if (lastPlantedCountry && COUNTRY_POSITIONS[lastPlantedCountry]) {
-      const pos = COUNTRY_POSITIONS[lastPlantedCountry]
-      setCharacterPos({ x: pos.x, y: pos.y })
+  const focusOnCountry = useCallback((countryId: string) => {
+    const coords = COUNTRY_COORDS[countryId]
+    if (!coords) return
+    targetCoordsRef.current = {
+      phi: -(coords.lng * Math.PI) / 180,
+      theta: (coords.lat * Math.PI) / 180,
     }
-  }, [lastPlantedCountry])
+  }, [])
+
+  // Rotate to last planted country
+  useEffect(() => {
+    if (lastPlantedCountry) {
+      focusOnCountry(lastPlantedCountry)
+    }
+  }, [lastPlantedCountry, focusOnCountry])
+
+  useEffect(() => {
+    if (!canvasRef.current) return
+
+    const canvas = canvasRef.current
+
+    // Build markers from planted flags
+    const getMarkers = () =>
+      flags.map((f) => {
+        const coords = COUNTRY_COORDS[f.countryId]
+        if (!coords) return null
+        return {
+          location: [coords.lat, coords.lng] as [number, number],
+          size: f.countryId === lastPlantedCountry ? 0.12 : 0.08,
+        }
+      }).filter(Boolean) as Array<{ location: [number, number]; size: number }>
+
+    let width = 0
+
+    const onResize = () => {
+      if (containerRef.current && canvasRef.current) {
+        width = containerRef.current.offsetWidth
+        canvasRef.current.width = width * 2
+        canvasRef.current.height = width * 2
+      }
+    }
+    onResize()
+
+    let resizeObserver: ResizeObserver | undefined
+    if (containerRef.current) {
+      resizeObserver = new ResizeObserver(onResize)
+      resizeObserver.observe(containerRef.current)
+    }
+
+    let globe: import("cobe").Globe | null = null
+
+    // Dynamic import to avoid SSR issues
+    import("cobe").then(({ default: createGlobe }) => {
+      if (!canvasRef.current) return
+      try {
+        globe = createGlobe(canvas, {
+          devicePixelRatio: 2,
+          width: width * 2,
+          height: width * 2,
+          phi: phiRef.current,
+          theta: thetaRef.current,
+          dark: 1,
+          diffuse: 1.2,
+          mapSamples: 16000,
+          mapBrightness: 6,
+          baseColor: [0.1, 0.1, 0.18],
+          markerColor: [0.37, 0.9, 0.63],
+          glowColor: [0.1, 0.1, 0.18],
+          markers: getMarkers(),
+        })
+        globeRef.current = globe
+
+        // Animation loop
+        const animate = () => {
+          if (!globe) return
+
+          // Auto-rotate when not hovered
+          if (!isHoveredRef.current) {
+            phiRef.current += 0.003
+          }
+
+          // Smooth rotation toward target country
+          if (targetCoordsRef.current) {
+            const { phi: targetPhi, theta: targetTheta } = targetCoordsRef.current
+            const dPhi = targetPhi - phiRef.current
+            const dTheta = targetTheta - thetaRef.current
+
+            // Normalize phi difference to [-PI, PI]
+            const normalizedDPhi = ((dPhi % (2 * Math.PI)) + 3 * Math.PI) % (2 * Math.PI) - Math.PI
+
+            phiRef.current += normalizedDPhi * 0.08
+            thetaRef.current += dTheta * 0.08
+
+            // Clear target when close enough
+            if (Math.abs(normalizedDPhi) < 0.01 && Math.abs(dTheta) < 0.01) {
+              targetCoordsRef.current = null
+            }
+          }
+
+          globe.update({
+            phi: phiRef.current,
+            theta: thetaRef.current,
+            width: width * 2,
+            height: width * 2,
+            markers: getMarkers(),
+          })
+
+          rafRef.current = requestAnimationFrame(animate)
+        }
+        rafRef.current = requestAnimationFrame(animate)
+      } catch {
+        // WebGL not available — canvas stays as dark fallback
+      }
+    })
+
+    return () => {
+      cancelAnimationFrame(rafRef.current)
+      globe?.destroy()
+      globeRef.current = null
+      resizeObserver?.disconnect()
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [flags.length, lastPlantedCountry])
 
   return (
     <div className="panel p-3 overflow-hidden">
@@ -99,183 +159,31 @@ export default function WorldMap({
         </span>
       </div>
 
-      <svg
-        viewBox="0 0 640 280"
-        className="w-full h-auto"
-        style={{ maxHeight: "260px" }}
+      <div
+        ref={containerRef}
+        className="relative w-full flex items-center justify-center"
+        style={{ maxHeight: "300px", aspectRatio: "1" }}
       >
-        {/* Background water effect */}
-        <defs>
-          <radialGradient id="mapGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#5ee6a0" stopOpacity="0.03" />
-            <stop offset="100%" stopColor="transparent" stopOpacity="0" />
-          </radialGradient>
-          <filter id="nodeGlow">
-            <feGaussianBlur stdDeviation="4" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-          <filter id="plantedGlow">
-            <feGaussianBlur stdDeviation="6" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-
-        <rect width="640" height="280" fill="transparent" />
-        <circle cx="320" cy="140" r="200" fill="url(#mapGlow)" />
-
-        {/* Region connection lines (subtle) */}
-        {Object.entries(COUNTRY_POSITIONS).map(([id, pos]) =>
-          Object.entries(COUNTRY_POSITIONS)
-            .filter(([otherId]) => {
-              // Connect neighbors within same region
-              const dx = Math.abs(pos.x - COUNTRY_POSITIONS[otherId].x)
-              const dy = Math.abs(pos.y - COUNTRY_POSITIONS[otherId].y)
-              return otherId > id && dx < 100 && dy < 80 && Math.sqrt(dx * dx + dy * dy) < 100
-            })
-            .map(([otherId, otherPos]) => (
-              <line
-                key={`${id}-${otherId}`}
-                x1={pos.x}
-                y1={pos.y}
-                x2={otherPos.x}
-                y2={otherPos.y}
-                stroke="rgba(255,255,255,0.04)"
-                strokeWidth="1"
-              />
-            ))
-        )}
-
-        {/* Country nodes */}
-        {Object.entries(COUNTRY_POSITIONS).map(([countryId, pos]) => {
-          const isPlanted = plantedCountryIds.has(countryId)
-          const isHovered = hoveredCountry === countryId
-          const country = countries.find((c) => c.id === countryId)
-
-          return (
-            <g
-              key={countryId}
-              className="cursor-pointer"
-              onMouseEnter={() => setHoveredCountry(countryId)}
-              onMouseLeave={() => setHoveredCountry(null)}
-              onClick={() => onCountryClick?.(countryId)}
-            >
-              {/* Planted glow ring */}
-              {isPlanted && (
-                <circle
-                  cx={pos.x}
-                  cy={pos.y}
-                  r={14}
-                  fill="none"
-                  stroke="#5ee6a0"
-                  strokeWidth="1.5"
-                  opacity="0.4"
-                  filter="url(#plantedGlow)"
-                  className="world-map-planted-pulse"
-                />
-              )}
-
-              {/* Node background */}
-              <circle
-                cx={pos.x}
-                cy={pos.y}
-                r={isHovered ? 11 : 9}
-                fill={
-                  isPlanted
-                    ? "rgba(94, 230, 160, 0.25)"
-                    : isHovered
-                    ? "rgba(255, 255, 255, 0.12)"
-                    : "rgba(255, 255, 255, 0.06)"
-                }
-                stroke={
-                  isPlanted
-                    ? "#5ee6a0"
-                    : isHovered
-                    ? "rgba(255, 255, 255, 0.3)"
-                    : "rgba(255, 255, 255, 0.1)"
-                }
-                strokeWidth={isPlanted ? 2 : 1}
-                style={{ transition: "all 200ms ease" }}
-              />
-
-              {/* Flag emoji for planted */}
-              {isPlanted && (
-                <text
-                  x={pos.x}
-                  y={pos.y + 1}
-                  textAnchor="middle"
-                  dominantBaseline="central"
-                  fontSize="10"
-                >
-                  {"\uD83C\uDFF4"}
-                </text>
-              )}
-
-              {/* Country label */}
-              <text
-                x={pos.x}
-                y={pos.y + (isPlanted ? 20 : 18)}
-                textAnchor="middle"
-                fill={isPlanted ? "#5ee6a0" : isHovered ? "#f0f0f0" : "rgba(255,255,255,0.4)"}
-                fontSize="7"
-                fontFamily="'Press Start 2P', monospace"
-                className="sm-map-label"
-                style={{ transition: "fill 200ms ease" }}
-              >
-                {pos.label}
-              </text>
-
-              {/* Hover tooltip */}
-              {isHovered && country && (
-                <g>
-                  <rect
-                    x={pos.x - 50}
-                    y={pos.y - 38}
-                    width={100}
-                    height={18}
-                    rx={4}
-                    fill="rgba(15, 23, 42, 0.95)"
-                    stroke="rgba(255,255,255,0.15)"
-                    strokeWidth="1"
-                  />
-                  <text
-                    x={pos.x}
-                    y={pos.y - 26}
-                    textAnchor="middle"
-                    fill="#f0f0f0"
-                    fontSize="7"
-                    fontFamily="'Press Start 2P', monospace"
-                  >
-                    {country.name}
-                  </text>
-                </g>
-              )}
-            </g>
-          )
-        })}
-
-        {/* Pixel character */}
-        <PixelCharacter x={characterPos.x} y={characterPos.y} />
-
-        {/* Region labels (subtle) */}
-        <text x={100} y={268} textAnchor="middle" fill="rgba(255,255,255,0.12)" fontSize="8" fontFamily="'Press Start 2P', monospace">
-          Americas
-        </text>
-        <text x={330} y={268} textAnchor="middle" fill="rgba(255,255,255,0.12)" fontSize="8" fontFamily="'Press Start 2P', monospace">
-          Europe
-        </text>
-        <text x={450} y={268} textAnchor="middle" fill="rgba(255,255,255,0.12)" fontSize="8" fontFamily="'Press Start 2P', monospace">
-          MENA
-        </text>
-        <text x={540} y={268} textAnchor="middle" fill="rgba(255,255,255,0.12)" fontSize="8" fontFamily="'Press Start 2P', monospace">
-          Asia
-        </text>
-      </svg>
+        <canvas
+          ref={canvasRef}
+          onPointerEnter={() => { isHoveredRef.current = true }}
+          onPointerLeave={() => { isHoveredRef.current = false }}
+          className="w-full h-full"
+          style={{
+            contain: "layout paint size",
+            maxHeight: "300px",
+            cursor: "grab",
+          }}
+        />
+        {/* WebGL fallback background */}
+        <div
+          className="absolute inset-0 rounded-full pointer-events-none"
+          style={{
+            background: "radial-gradient(circle, rgba(94,230,160,0.03) 0%, transparent 70%)",
+            zIndex: -1,
+          }}
+        />
+      </div>
     </div>
   )
 }
