@@ -21,7 +21,7 @@ export default function EventCard({ event, onAcknowledge }: EventCardProps) {
         {/* Icon */}
         <div className="text-center">
           <div className="text-4xl mb-3">
-            {isPositive ? "\u{1F4E2}" : "\u{26A0}\u{FE0F}"}
+            {isPositive ? "\uD83D\uDCE2" : "\u26A0\uFE0F"}
           </div>
           <div className="text-[8px] text-text-muted uppercase tracking-widest mb-1">
             Regulatory Event

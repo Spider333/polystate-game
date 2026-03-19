@@ -1,12 +1,12 @@
 import Link from "next/link"
 
 const SHOWCASE_FLAGS = [
-  { id: "PY", emoji: "\u{1F1F5}\u{1F1FE}", name: "Paraguay", tag: "0% Tax" },
-  { id: "AE", emoji: "\u{1F1E6}\u{1F1EA}", name: "UAE", tag: "Business Hub" },
-  { id: "SG", emoji: "\u{1F1F8}\u{1F1EC}", name: "Singapore", tag: "Premium" },
-  { id: "GE", emoji: "\u{1F1EC}\u{1F1EA}", name: "Georgia", tag: "Low Cost" },
-  { id: "PT", emoji: "\u{1F1F5}\u{1F1F9}", name: "Portugal", tag: "EU Access" },
-  { id: "SV", emoji: "\u{1F1F8}\u{1F1FB}", name: "El Salvador", tag: "BTC Legal" },
+  { id: "PY", emoji: "\uD83C\uDDF5\uD83C\uDDFE", name: "Paraguay", tag: "0% Tax" },
+  { id: "AE", emoji: "\uD83C\uDDE6\uD83C\uDDEA", name: "UAE", tag: "Business Hub" },
+  { id: "SG", emoji: "\uD83C\uDDF8\uD83C\uDDEC", name: "Singapore", tag: "Premium" },
+  { id: "GE", emoji: "\uD83C\uDDEC\uD83C\uDDEA", name: "Georgia", tag: "Low Cost" },
+  { id: "PT", emoji: "\uD83C\uDDF5\uD83C\uDDF9", name: "Portugal", tag: "EU Access" },
+  { id: "SV", emoji: "\uD83C\uDDF8\uD83C\uDDFB", name: "El Salvador", tag: "BTC Legal" },
 ]
 
 export default function Home() {
@@ -74,9 +74,9 @@ export default function Home() {
         <div className="panel p-6 space-y-4">
           <h3 className="text-[10px] text-accent-teal uppercase tracking-widest">The Setup</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <StatBox icon="\u{1F4B0}" value="$50,000" label="Starting cash" />
-            <StatBox icon="\u{1F4C8}" value="$10K/QTR" label="Quarterly income" />
-            <StatBox icon="\u{23F3}" value="20 TURNS" label="5 game years" />
+            <StatBox icon={"\uD83D\uDCB0"} value="$50,000" label="Starting cash" />
+            <StatBox icon={"\uD83D\uDCC8"} value="$10K/QTR" label="Quarterly income" />
+            <StatBox icon={"\u23F3"} value="20 TURNS" label="5 game years" />
           </div>
           <p className="text-[9px] text-text-secondary leading-relaxed">
             You start paying 30% tax on your income. Every quarter, you collect income (minus tax),
@@ -92,21 +92,21 @@ export default function Home() {
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <FlagTypeCard
-              icon="\u{1F3E0}"
+              icon={"\uD83C\uDFE0"}
               title="Residency"
               color="accent-green"
               description="Where you live. Sets your base country and affects safety & privacy scores."
               example="Paraguay Temp Residency — $2K setup, $500/yr"
             />
             <FlagTypeCard
-              icon="\u{1F4B0}"
+              icon={"\uD83D\uDCB0"}
               title="Tax Residency"
               color="accent-gold"
               description="Where you pay taxes. This is the big one — drops your tax rate from 30% to the country's rate."
               example="UAE Tax Residency — $3K setup, 0% tax rate"
             />
             <FlagTypeCard
-              icon="\u{1F3E2}"
+              icon={"\uD83C\uDFE2"}
               title="Business"
               color="accent-blue"
               description="Where you incorporate. Affects business ease score and annual maintenance costs."
@@ -153,10 +153,10 @@ export default function Home() {
         <div className="panel p-6 space-y-4">
           <h3 className="text-[10px] text-accent-teal uppercase tracking-widest text-center">Medals</h3>
           <div className="flex justify-center gap-4 sm:gap-8">
-            <MedalBadge emoji="\u{1F949}" label="Bronze" req="50+" />
-            <MedalBadge emoji="\u{1F948}" label="Silver" req="70+" />
-            <MedalBadge emoji="\u{1F3C6}" label="Gold" req="85+" />
-            <MedalBadge emoji="\u{1F48E}" label="Diamond" req="95+" />
+            <MedalBadge emoji={"\uD83E\uDD49"} label="Bronze" req="50+" />
+            <MedalBadge emoji={"\uD83E\uDD48"} label="Silver" req="70+" />
+            <MedalBadge emoji={"\uD83C\uDFC6"} label="Gold" req="85+" />
+            <MedalBadge emoji={"\uD83D\uDC8E"} label="Diamond" req="95+" />
           </div>
         </div>
 
@@ -255,7 +255,7 @@ function TurnStep({ num, label, sub }: { num: string; label: string; sub: string
 
 function Arrow() {
   return (
-    <div className="text-text-muted text-[10px] hidden sm:block">&rarr;</div>
+    <div className="text-text-muted text-[10px] hidden sm:block">{"\u2192"}</div>
   )
 }
 

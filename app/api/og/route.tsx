@@ -10,10 +10,10 @@ export async function GET(request: NextRequest) {
   const flags = searchParams.get("flags") ?? ""
 
   const medalEmoji: Record<string, string> = {
-    diamond: "\u{1F48E}",
-    gold: "\u{1F3C6}",
-    silver: "\u{1F948}",
-    bronze: "\u{1F949}",
+    diamond: "\uD83D\uDC8E",
+    gold: "\uD83C\uDFC6",
+    silver: "\uD83E\uDD48",
+    bronze: "\uD83E\uDD49",
     none: "",
   }
 

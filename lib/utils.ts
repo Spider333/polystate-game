@@ -13,10 +13,10 @@ export function formatCashFull(amount: number): string {
 
 export function getMedalEmoji(medal: Medal): string {
   switch (medal) {
-    case "diamond": return "\u{1F48E}"
-    case "gold": return "\u{1F3C6}"
-    case "silver": return "\u{1F948}"
-    case "bronze": return "\u{1F949}"
+    case "diamond": return "\uD83D\uDC8E"
+    case "gold": return "\uD83C\uDFC6"
+    case "silver": return "\uD83E\uDD48"
+    case "bronze": return "\uD83E\uDD49"
     default: return ""
   }
 }
@@ -52,35 +52,35 @@ export function getCategoryLabel(category: string): string {
 
 export function getCategoryIcon(category: string): string {
   switch (category) {
-    case "residency": return "\u{1F3E0}"
-    case "tax": return "\u{1F4B0}"
-    case "business": return "\u{1F3E2}"
-    default: return "\u{1F3F4}"
+    case "residency": return "\uD83C\uDFE0"
+    case "tax": return "\uD83D\uDCB0"
+    case "business": return "\uD83C\uDFE2"
+    default: return "\uD83C\uDFF4"
   }
 }
 
 export function getFlagEmoji(countryId: string): string {
   const flags: Record<string, string> = {
-    PY: "\u{1F1F5}\u{1F1FE}",
-    AE: "\u{1F1E6}\u{1F1EA}",
-    PA: "\u{1F1F5}\u{1F1E6}",
-    GE: "\u{1F1EC}\u{1F1EA}",
-    PT: "\u{1F1F5}\u{1F1F9}",
-    SG: "\u{1F1F8}\u{1F1EC}",
-    TH: "\u{1F1F9}\u{1F1ED}",
-    EE: "\u{1F1EA}\u{1F1EA}",
-    HK: "\u{1F1ED}\u{1F1F0}",
-    MY: "\u{1F1F2}\u{1F1FE}",
-    CR: "\u{1F1E8}\u{1F1F7}",
-    CO: "\u{1F1E8}\u{1F1F4}",
-    CZ: "\u{1F1E8}\u{1F1FF}",
-    MT: "\u{1F1F2}\u{1F1F9}",
-    KY: "\u{1F1F0}\u{1F1FE}",
-    VG: "\u{1F1FB}\u{1F1EC}",
-    CH: "\u{1F1E8}\u{1F1ED}",
-    SV: "\u{1F1F8}\u{1F1FB}",
-    "US-DE": "\u{1F1FA}\u{1F1F8}",
-    "US-WY": "\u{1F1FA}\u{1F1F8}",
+    PY: "\uD83C\uDDF5\uD83C\uDDFE",
+    AE: "\uD83C\uDDE6\uD83C\uDDEA",
+    PA: "\uD83C\uDDF5\uD83C\uDDE6",
+    GE: "\uD83C\uDDEC\uD83C\uDDEA",
+    PT: "\uD83C\uDDF5\uD83C\uDDF9",
+    SG: "\uD83C\uDDF8\uD83C\uDDEC",
+    TH: "\uD83C\uDDF9\uD83C\uDDED",
+    EE: "\uD83C\uDDEA\uD83C\uDDEA",
+    HK: "\uD83C\uDDED\uD83C\uDDF0",
+    MY: "\uD83C\uDDF2\uD83C\uDDFE",
+    CR: "\uD83C\uDDE8\uD83C\uDDF7",
+    CO: "\uD83C\uDDE8\uD83C\uDDF4",
+    CZ: "\uD83C\uDDE8\uD83C\uDDFF",
+    MT: "\uD83C\uDDF2\uD83C\uDDF9",
+    KY: "\uD83C\uDDF0\uD83C\uDDFE",
+    VG: "\uD83C\uDDFB\uD83C\uDDEC",
+    CH: "\uD83C\uDDE8\uD83C\uDDED",
+    SV: "\uD83C\uDDF8\uD83C\uDDFB",
+    "US-DE": "\uD83C\uDDFA\uD83C\uDDF8",
+    "US-WY": "\uD83C\uDDFA\uD83C\uDDF8",
   }
-  return flags[countryId] ?? "\u{1F3F3}\u{FE0F}"
+  return flags[countryId] ?? "\uD83C\uDFF3\uFE0F"
 }

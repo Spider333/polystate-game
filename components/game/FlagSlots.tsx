@@ -9,9 +9,9 @@ interface FlagSlotsProps {
 }
 
 const CATEGORIES = [
-  { key: "residency" as const, icon: "\u{1F3E0}", color: "accent-green" },
-  { key: "tax" as const, icon: "\u{1F4B0}", color: "accent-gold" },
-  { key: "business" as const, icon: "\u{1F3E2}", color: "accent-blue" },
+  { key: "residency" as const, icon: "\uD83C\uDFE0", color: "accent-green" },
+  { key: "tax" as const, icon: "\uD83D\uDCB0", color: "accent-gold" },
+  { key: "business" as const, icon: "\uD83C\uDFE2", color: "accent-blue" },
 ]
 
 export default function FlagSlots({ flags, countries }: FlagSlotsProps) {

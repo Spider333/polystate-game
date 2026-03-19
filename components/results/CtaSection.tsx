@@ -23,7 +23,7 @@ export default function CtaSection({ score, medal, flags }: CtaSectionProps) {
     <div className="space-y-4">
       {/* Make it real CTA */}
       <div className="panel-accent p-6 text-center space-y-4 rounded-xl">
-        <div className="text-2xl">{"\u{1F30D}"}</div>
+        <div className="text-2xl">{"\uD83C\uDF0D"}</div>
         <h3 className="text-[10px] text-accent-gold font-pixel glow-gold">MAKE IT REAL</h3>
         <p className="text-[9px] text-text-secondary leading-relaxed max-w-sm mx-auto">
           Ready to actually plant your flags? Polystate helps you set up

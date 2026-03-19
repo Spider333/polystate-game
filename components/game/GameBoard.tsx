@@ -64,28 +64,28 @@ export default function GameBoard() {
 
           <div className="panel p-5 space-y-4 text-left">
             <div className="flex items-center gap-3">
-              <span className="text-xl">{"\u{1F4B0}"}</span>
+              <span className="text-xl">{"\uD83D\uDCB0"}</span>
               <div>
                 <div className="text-[9px] text-text-primary">$50,000 starting cash</div>
                 <div className="text-[7px] text-text-muted">+ $10K income every quarter</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-xl">{"\u{1F3F4}"}</span>
+              <span className="text-xl">{"\uD83C\uDFF4"}</span>
               <div>
                 <div className="text-[9px] text-text-primary">Plant flags in 20 countries</div>
                 <div className="text-[7px] text-text-muted">Residency, Tax, and Business</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-xl">{"\u{23F3}"}</span>
+              <span className="text-xl">{"\u23F3"}</span>
               <div>
                 <div className="text-[9px] text-text-primary">20 turns (5 game years)</div>
                 <div className="text-[7px] text-text-muted">Navigate events, maximize sovereignty</div>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-xl">{"\u{1F3C6}"}</span>
+              <span className="text-xl">{"\uD83C\uDFC6"}</span>
               <div>
                 <div className="text-[9px] text-text-primary">Score 95+ for Diamond</div>
                 <div className="text-[7px] text-text-muted">Tax + Diversify + Safety + Privacy + Biz + Cost</div>
@@ -160,7 +160,7 @@ export default function GameBoard() {
             {(state.phase === "INCOME" || state.phase === "MAINTENANCE") && (
               <div className="flex flex-col items-center justify-center h-40 gap-3">
                 <div className="text-3xl animate-float">
-                  {state.phase === "INCOME" ? "\u{1F4B5}" : "\u{1F4CB}"}
+                  {state.phase === "INCOME" ? "\uD83D\uDCB5" : "\uD83D\uDCCB"}
                 </div>
                 <div className="text-[10px] text-text-secondary animate-pulse-soft">
                   {state.phase === "INCOME"
