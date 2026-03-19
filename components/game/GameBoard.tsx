@@ -1,6 +1,6 @@
 "use client"
 
-import { useReducer, useEffect } from "react"
+import { useReducer, useEffect, useState } from "react"
 import { gameReducer, getInitialState } from "@/engine/reducer"
 import type { Program } from "@/engine/types"
 import programsData from "@/data/programs.json"
@@ -10,6 +10,7 @@ import CountryPicker from "./CountryPicker"
 import FlagSlots from "./FlagSlots"
 import EventCard from "./EventCard"
 import ActionButtons from "./ActionButtons"
+import WorldMap from "./WorldMap"
 import PixelButton from "@/components/ui/PixelButton"
 import { useRouter } from "next/navigation"
 import { formatCash } from "@/lib/utils"
@@ -18,6 +19,7 @@ const programs = programsData as Program[]
 
 export default function GameBoard() {
   const [state, dispatch] = useReducer(gameReducer, getInitialState())
+  const [lastPlantedCountry, setLastPlantedCountry] = useState<string | null>(null)
   const router = useRouter()
 
   // Auto-advance phases
@@ -145,13 +147,22 @@ export default function GameBoard() {
               </div>
             )}
 
+            {(state.phase === "ACTION" || state.phase === "TURN_END") && (
+              <WorldMap
+                countries={state.countries}
+                flags={state.flags}
+                lastPlantedCountry={lastPlantedCountry}
+              />
+            )}
+
             {state.phase === "ACTION" && (
               <CountryPicker
                 countries={state.countries}
                 programs={programs}
-                onSelectProgram={(program) =>
+                onSelectProgram={(program) => {
+                  setLastPlantedCountry(program.countryId)
                   dispatch({ type: "PLANT_FLAG", program })
-                }
+                }}
                 cash={state.cash}
                 flags={state.flags}
               />
