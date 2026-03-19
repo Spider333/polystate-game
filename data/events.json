@@ -1,0 +1,129 @@
+[
+  {
+    "id": "evt-mica",
+    "turn": 3,
+    "title": "EU MiCA Regulation",
+    "description": "The EU enforces Markets in Crypto-Assets regulation. All EU-based crypto businesses need CASP licenses. Compliance costs rise.",
+    "effect": {
+      "type": "cost_increase",
+      "targets": ["EE", "PT", "CZ", "MT"],
+      "categories": ["business"],
+      "amount": 2000,
+      "message": "EU business annual costs +$2,000"
+    }
+  },
+  {
+    "id": "evt-uae-expand",
+    "turn": 5,
+    "title": "UAE Crypto Hub Expansion",
+    "description": "Dubai announces new crypto free zone benefits. Setup costs drop and more licenses available.",
+    "effect": {
+      "type": "cost_decrease",
+      "targets": ["AE"],
+      "categories": ["business", "residency"],
+      "amount": 2000,
+      "message": "UAE setup costs -$2,000"
+    }
+  },
+  {
+    "id": "evt-py-crs",
+    "turn": 7,
+    "title": "Paraguay Joins CRS",
+    "description": "Paraguay begins Common Reporting Standard exchanges. Financial privacy advantage diminished.",
+    "effect": {
+      "type": "score_change",
+      "targets": ["PY"],
+      "field": "privacyScore",
+      "newValue": 4,
+      "message": "Paraguay privacy score drops to 4"
+    }
+  },
+  {
+    "id": "evt-th-holiday",
+    "turn": 9,
+    "title": "Thailand Extends Tax Holiday",
+    "description": "Thailand extends the crypto tax holiday to 2032. Great news for Thailand tax residents!",
+    "effect": {
+      "type": "bonus_cash",
+      "condition": { "countryId": "TH", "category": "tax" },
+      "amount": 5000,
+      "message": "Thailand tax residents get $5,000 bonus"
+    }
+  },
+  {
+    "id": "evt-sg-tighten",
+    "turn": 11,
+    "title": "Singapore Tightens Entry",
+    "description": "Singapore raises minimum investment for EntrePass. Premium jurisdiction gets more exclusive.",
+    "effect": {
+      "type": "cost_increase",
+      "targets": ["SG"],
+      "categories": ["residency"],
+      "amount": 5000,
+      "message": "Singapore residency costs +$5,000"
+    }
+  },
+  {
+    "id": "evt-sv-btc-boom",
+    "turn": 13,
+    "title": "El Salvador Bitcoin Boom",
+    "description": "BTC hits new all-time high. El Salvador's Bitcoin reserves generate surplus. Tax residents get a dividend.",
+    "effect": {
+      "type": "bonus_cash",
+      "condition": { "countryId": "SV", "category": "tax" },
+      "amount": 8000,
+      "message": "El Salvador tax residents get $8,000 BTC dividend"
+    }
+  },
+  {
+    "id": "evt-global-crackdown",
+    "turn": 15,
+    "title": "Global Tax Crackdown",
+    "description": "OECD pushes new Crypto-Asset Reporting Framework (CARF). Countries with low privacy scores unaffected, others face scrutiny.",
+    "effect": {
+      "type": "cost_increase",
+      "targets": ["KY", "VG", "PA"],
+      "categories": ["business"],
+      "amount": 3000,
+      "message": "Offshore jurisdictions compliance +$3,000"
+    }
+  },
+  {
+    "id": "evt-ge-eu-path",
+    "turn": 17,
+    "title": "Georgia EU Candidate Status",
+    "description": "Georgia gets EU candidate status. Property values and business interest surge. Costs rise but safety improves.",
+    "effect": {
+      "type": "score_change",
+      "targets": ["GE"],
+      "field": "safetyScore",
+      "newValue": 8,
+      "message": "Georgia safety score rises to 8"
+    }
+  },
+  {
+    "id": "evt-hk-defi-regs",
+    "turn": 18,
+    "title": "Hong Kong DeFi Regulations",
+    "description": "Hong Kong introduces mandatory DeFi protocol registration. Business costs increase but legitimacy rises.",
+    "effect": {
+      "type": "cost_increase",
+      "targets": ["HK"],
+      "categories": ["business"],
+      "amount": 2500,
+      "message": "Hong Kong business costs +$2,500"
+    }
+  },
+  {
+    "id": "evt-network-state",
+    "turn": 20,
+    "title": "Network State Recognition",
+    "description": "A digital jurisdiction gets diplomatic recognition. Players with 3+ flags in different countries get a sovereignty bonus.",
+    "effect": {
+      "type": "bonus_cash",
+      "condition": { "minUniqueCountries": 3 },
+      "amount": 10000,
+      "message": "Diversified players get $10,000 sovereignty bonus"
+    }
+  }
+]

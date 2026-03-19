@@ -1,0 +1,71 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+@layer base {
+  body {
+    @apply bg-bg-dark text-text-primary font-pixel;
+  }
+}
+
+@layer utilities {
+  .pixel-border {
+    box-shadow:
+      inset -4px -4px 0px 0px rgba(0, 0, 0, 0.3),
+      inset 4px 4px 0px 0px rgba(255, 255, 255, 0.1),
+      0 0 0 2px rgba(255, 255, 255, 0.1);
+  }
+
+  .pixel-border-accent {
+    box-shadow:
+      inset -4px -4px 0px 0px rgba(0, 0, 0, 0.3),
+      inset 4px 4px 0px 0px rgba(78, 204, 163, 0.3),
+      0 0 0 2px #4ecca3;
+  }
+
+  .pixel-border-gold {
+    box-shadow:
+      inset -4px -4px 0px 0px rgba(0, 0, 0, 0.3),
+      inset 4px 4px 0px 0px rgba(255, 211, 105, 0.3),
+      0 0 0 2px #ffd369;
+  }
+
+  .pixel-border-red {
+    box-shadow:
+      inset -4px -4px 0px 0px rgba(0, 0, 0, 0.3),
+      inset 4px 4px 0px 0px rgba(226, 62, 87, 0.3),
+      0 0 0 2px #e23e57;
+  }
+
+  .pixel-text-shadow {
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.5);
+  }
+
+  .image-pixelated {
+    image-rendering: pixelated;
+  }
+
+  .animate-pixel-pulse {
+    animation: pixelPulse 1s ease-in-out infinite;
+  }
+
+  @keyframes pixelPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  .scrollbar-pixel::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .scrollbar-pixel::-webkit-scrollbar-track {
+    background: #16213e;
+  }
+
+  .scrollbar-pixel::-webkit-scrollbar-thumb {
+    background: #4ecca3;
+    border: 2px solid #16213e;
+  }
+}
